@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { Booklist } from "./pages/booklist/booklist";   
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'booklist', component: Booklist }
+  { path: '',
+    pathMatch: 'full',
+    loadComponent: () => {
+      return import('./pages/home/home').then(m => m.Home)}
+  },
+  { path: 'booklist',
+    loadComponent: () => {
+      return import('./pages/booklist/booklist').then(m => m.Booklist)}
+  }
 ];
