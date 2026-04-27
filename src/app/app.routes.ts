@@ -9,5 +9,9 @@ export const routes: Routes = [
   { path: 'booklist',
     loadComponent: () => {
       return import('./pages/booklist/booklist').then(m => m.Booklist)}
+  },
+  { path: 'citation',
+    loadComponent: () => {
+      return import('./pages/citation/citation').then(m => m.Citation)}
   }
 ];

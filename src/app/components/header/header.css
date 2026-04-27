@@ -1,36 +1,54 @@
+/* Main header container */
 header {
     display: flex;
     padding-inline: 16px;
-    padding-block: 8px;
+    padding-block: 12px;
     background-color: rgb(83, 117, 145);
-    color: #000;
+    color: white;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* Navigation container */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
+/* "Bookshelf" title/logo in top left */
+nav > span {
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
 
-        >span {
-            cursor: pointer;
+/* Hover effect for title */
+nav > span:hover {
+    color: #e0e0e0;
+}
 
-            &:hover {
-                color: #474141;
-            }
-        }
+/* Navigation menu list */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0 auto;
+    padding: 0;
+}
 
-            ul {
-                list-style: none;
+/* Individual navigation links */
+nav ul li {
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
 
-                li {
-                    cursor: pointer;
+}
 
-                    &:hover {
-                        color: #474141;
-                    }
-                }
-            }
-        }
-    }
+/* Hover effect for navigation links */
+nav ul li:hover {
+    color: #e0e0e0;
+}
