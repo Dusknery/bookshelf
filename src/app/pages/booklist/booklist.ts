@@ -1,15 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { BooklistItem } from '../../components/booklist-item/booklist-item';
-
-// Define the Book interface
-interface Book {
-  title: string;
-  author: string;
-  publicationDate: string;
-  addedAt: Date;
-}
+import { BookService } from '../../services/book';
+import type { Book } from '../../services/book';
 
 @Component({
   selector: 'app-booklist',
@@ -18,8 +11,8 @@ interface Book {
   templateUrl: './booklist.html',
   styleUrl: './booklist.css',
 })
-export class Booklist {
-  // List of books in the booklist
+export class Booklist implements OnInit {
+  // Local state for the list of books
   books: Book[] = [];
 
   // Form state management (default values)
@@ -34,6 +27,18 @@ export class Booklist {
     publicationDate: '',
     addedAt: new Date(),
   };
+
+  constructor(private bookService: BookService) {}
+
+  ngOnInit() {
+    this.loadBooks();
+  }
+
+  loadBooks() {
+    this.bookService.getBooks().subscribe((data) => {
+      this.books = data;
+    });
+  }
 
   // Open the form for adding a new book
   openAddForm() {
@@ -69,21 +74,33 @@ export class Booklist {
     }
 
     if (this.isEditing && this.editingIndex !== null) {
-      this.books[this.editingIndex] = { ...this.bookForm };
+      const bookId = this.books[this.editingIndex].id;
+
+      if (!bookId) return;
+
+      this.bookService.updateBook(bookId, this.bookForm).subscribe(() => {
+        this.loadBooks();
+        this.closeForm();
+      });
     } else {
-      this.books.push({ ...this.bookForm });
+      this.bookService.addBook(this.bookForm).subscribe(() => {
+        this.loadBooks();
+        this.closeForm();
+      });
     }
-
-    this.closeForm();
   }
-   
-  // Remove a book from the list
-  removeBook(index: number) {
-    this.books.splice(index, 1);  
-} 
 
-// Close the form and reset state
-closeForm() {
+  // Remove a book from the list
+  removeBook(book: Book) {
+    if (!book.id) return;
+
+    this.bookService.deleteBook(book.id).subscribe(() => {
+      this.loadBooks();
+    });
+  }
+
+  // Close the form and reset state
+  closeForm() {
     this.showForm = false;
     this.isEditing = false;
     this.editingIndex = null;
@@ -94,5 +111,5 @@ closeForm() {
       publicationDate: '',
       addedAt: new Date(),
     };
-  } 
+  }
 }
