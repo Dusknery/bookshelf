@@ -6,9 +6,9 @@
  <!-- Loop (@ for) through the list of citations and display them with edit/delete options (note to self) -->
     @for (citation of Citations; track $index; let i = $index) {
         <li>
-            <strong>{{ citation.bookId }}</strong> - {{ citation.author }} - "{{ citation.citation }}"
+            <strong>{{ citation.id }}</strong> - "{{ citation.citationText }}"
             <button (click)="openEditForm(i)">Edit</button>
-            <button (click)="removeCitation(i)">Delete</button>
+            <button (click)="removeCitation(citation)">Delete</button>
         </li>
     }
 
@@ -19,14 +19,8 @@
         <div class="modal">
             <h3>{{ isEditing ? 'Edit citation' : 'Add citation' }}</h3>
 
-            <label for="citationBookId">Book</label>
-            <input type="text" id="citationBookId" name="citationBookId" [(ngModel)]="citationForm.bookId">
-
-            <label for="citationAuthor">Author</label>
-            <input type="text" id="citationAuthor" name="citationAuthor" [(ngModel)]="citationForm.author">
-
             <label for="citationText">Citation/Quote</label>
-            <input type="text" id="citationText" name="citationText" [(ngModel)]="citationForm.citation">
+            <input type="text" id="citationText" name="citationText" [(ngModel)]="citationForm.citationText">
 
             <button (click)="saveCitation()">Save</button>
             <button (click)="closeForm()">Cancel</button>

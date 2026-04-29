@@ -3,33 +3,33 @@
 <button (click)="openAddForm()">Add Book</button>
 
 <ul>
- <!-- Loop (@ for) through the list of books and display them with edit/delete options (note to self) -->
+    <!-- Loop (@ for) through the list of books and display them with edit/delete options (note to self) -->
     @for (book of books; track $index; let i = $index) {
-        <li>
-            <strong>{{ book.title }}</strong> - {{ book.author }} - {{ book.publicationDate }} - Added: {{ book.addedAt | date:'short' }}
-            <button (click)="openEditForm(i)">Edit</button>
-            <button (click)="removeBook(i)">Delete</button>
-        </li>
+    <li>
+        <strong>{{ book.title }}</strong> - {{ book.author }} - {{ book.publicationDate }}
+        <button (click)="openEditForm(i)">Edit</button>
+        <button (click)="removeBook(book)">Delete</button>
+    </li>
     }
 
-<!-- form -->
+    <!-- form -->
 </ul>
 @if (showForm) {
-    <div class="modal-backdrop">
-        <div class="modal">
-            <h3>{{ isEditing ? 'Edit book' : 'Add book' }}</h3>
+<div class="modal-backdrop">
+    <div class="modal">
+        <h3>{{ isEditing ? 'Edit book' : 'Add book' }}</h3>
 
-            <label for="bookTitle">Title</label>
-            <input type="text" id="bookTitle" name="bookTitle" [(ngModel)]="bookForm.title">
+        <label for="bookTitle">Title</label>
+        <input type="text" id="bookTitle" name="bookTitle" [(ngModel)]="bookForm.title">
 
-            <label for="bookAuthor">Author</label>
-            <input type="text" id="bookAuthor" name="bookAuthor" [(ngModel)]="bookForm.author">
+        <label for="bookAuthor">Author</label>
+        <input type="text" id="bookAuthor" name="bookAuthor" [(ngModel)]="bookForm.author">
 
-            <label for="bookPublicationDate">Publication Date</label>
-            <input type="month" id="bookPublicationDate" name="bookPublicationDate" [(ngModel)]="bookForm.publicationDate">
+        <label for="bookPublicationDate">Publication Date</label>
+        <input type="month" id="bookPublicationDate" name="bookPublicationDate" [(ngModel)]="bookForm.publicationDate">
 
-            <button (click)="saveBook()">Save</button>
-            <button (click)="closeForm()">Cancel</button>
-        </div>
+        <button (click)="saveBook()">Save</button>
+        <button (click)="closeForm()">Cancel</button>
     </div>
+</div>
 }

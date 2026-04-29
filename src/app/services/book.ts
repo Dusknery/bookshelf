@@ -8,7 +8,6 @@ export interface Book {
   title: string;
   author: string;
   publicationDate: string;
-  addedAt: Date;
 }
 
 // Service to manage book-related services (fetching, adding, etc.)
@@ -16,7 +15,7 @@ export interface Book {
   providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = 'http://localhost:5067/api/books';
+  private apiUrl = 'http://localhost:5070/api/books';
 
   constructor(private http: HttpClient) {}
 

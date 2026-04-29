@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { BookService } from '../../services/book';
 import type { Book } from '../../services/book';
 
 @Component({
   selector: 'app-booklist',
-  standalone: true, // not a ngModule component, own its own dependencies, can be imported directly in routes
-  imports: [FormsModule, DatePipe],
+  standalone: true, // not a ngModule component, own its own dependencies, can be imported directly in routes (note to self)
+  imports: [FormsModule],
   templateUrl: './booklist.html',
   styleUrl: './booklist.css',
 })
@@ -25,7 +24,6 @@ export class Booklist implements OnInit {
     title: '',
     author: '',
     publicationDate: '',
-    addedAt: new Date(),
   };
 
   constructor(private bookService: BookService) {}
@@ -50,7 +48,6 @@ export class Booklist implements OnInit {
       title: '',
       author: '',
       publicationDate: '',
-      addedAt: new Date(),
     };
   }
 
@@ -109,7 +106,6 @@ export class Booklist implements OnInit {
       title: '',
       author: '',
       publicationDate: '',
-      addedAt: new Date(),
     };
   }
 }
