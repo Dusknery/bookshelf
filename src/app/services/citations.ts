@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 export interface BookCitation {
   id: number;
   citationText: string;
-  userId: number;
 }
 
 export interface CreateCitation {
