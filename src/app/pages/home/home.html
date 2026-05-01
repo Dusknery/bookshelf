@@ -1,1 +1,46 @@
-    <p>home works!</p>
+<div class="auth-box">
+
+  <div *ngIf="successMessage" class="success">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- login -->
+  <div *ngIf="isLogin">
+    <h2>Login</h2>
+
+    <input [(ngModel)]="email" placeholder="Email" />
+    <input [(ngModel)]="password" type="password" placeholder="Password" />
+
+    <button (click)="login()">Login</button>
+
+    <p>
+      Don't have an account?
+      <a (click)="toggle()">Sign up</a>
+    </p>
+  </div>
+
+  <!-- signup -->
+  <div *ngIf="!isLogin">
+    <h2>Sign up</h2>
+
+    <input [(ngModel)]="email" placeholder="Email" />
+    <input [(ngModel)]="password" type="password" placeholder="Password" />
+    <input [(ngModel)]="confirmPassword" type="password" placeholder="Confirm Password" />
+
+    <p *ngIf="confirmPassword" [ngStyle]="{ color: password === confirmPassword ? 'green' : 'red' }">
+      {{ password === confirmPassword ? 'Passwords match' : 'Passwords do not match' }}
+    </p>
+
+    <button (click)="register()">Create account</button>
+
+    <p>
+      Already have an account?
+      <a (click)="toggle()">Login</a>
+    </p>
+  </div>
+
+</div>

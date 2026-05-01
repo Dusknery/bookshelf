@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 
 namespace backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/citations")]
 public class CitationsController : ControllerBase
@@ -19,7 +23,14 @@ public class CitationsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Citation>>> GetCitations()
     {
-        return await _context.Citations.ToListAsync();
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var citations = await _context.Citations
+        .Where(b => b.UserId == userId)
+        .ToListAsync();
+
+        return Ok(citations);
     }
 
 
@@ -27,20 +38,30 @@ public class CitationsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Citation>> GetCitation(int id)
     {
-        var citation = await _context.Citations.FindAsync(id);
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var citation = await _context.Citations
+            .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
         if (citation == null)
-        {
             return NotFound();
-        }
-        return citation;
+
+        return Ok(citation);
     }
 
     //POST create new citation
     [HttpPost]
     public async Task<ActionResult<Citation>> AddCitation(Citation citation)
     {
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        citation.UserId = userId;
+
         _context.Citations.Add(citation);
         await _context.SaveChangesAsync();
+
         return CreatedAtAction("GetCitation", new { id = citation.Id }, citation);
     }
 
@@ -48,14 +69,16 @@ public class CitationsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCitation(int id, Citation updatedCitation)
     {
-        if (id != updatedCitation.Id)
-            return BadRequest();
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
 
-        var existingCitation = await _context.Citations.FindAsync(id);
-        if (existingCitation == null)
+        var existingcitation = await _context.Citations
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
+
+        if (existingcitation == null)
             return NotFound();
 
-        existingCitation.CitationText = updatedCitation.CitationText;
+       existingcitation.CitationText = updatedCitation.CitationText;
 
         await _context.SaveChangesAsync();
 
@@ -66,7 +89,12 @@ public class CitationsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCitation(int id)
     {
-        var citation = await _context.Citations.FindAsync(id);
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var citation = await _context.Citations
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
+
         if (citation == null)
             return NotFound();
 

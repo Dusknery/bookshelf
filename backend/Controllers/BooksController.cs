@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/books")]
 public class BooksController : ControllerBase
@@ -18,7 +21,14 @@ public class BooksController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Book>>> GetBooks()
     {
-        return await _context.Books.ToListAsync();
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var books = await _context.Books
+        .Where(b => b.UserId == userId)
+        .ToListAsync();
+
+        return Ok(books);
     }
 
 
@@ -26,20 +36,30 @@ public class BooksController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBook(int id)
     {
-        var book = await _context.Books.FindAsync(id);
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var book = await _context.Books
+            .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
         if (book == null)
-        {
             return NotFound();
-        }
-        return book;
+
+        return Ok(book);
     }
 
     //POST create new book
     [HttpPost]
     public async Task<ActionResult<Book>> AddBook(Book book)
     {
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        book.UserId = userId;
+
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
+
         return CreatedAtAction("GetBook", new { id = book.Id }, book);
     }
 
@@ -47,10 +67,12 @@ public class BooksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBook(int id, Book updatedBook)
     {
-        if (id != updatedBook.Id)
-            return BadRequest();
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
 
-        var existingBook = await _context.Books.FindAsync(id);
+        var existingBook = await _context.Books
+            .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
         if (existingBook == null)
             return NotFound();
 
@@ -67,7 +89,12 @@ public class BooksController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
-        var book = await _context.Books.FindAsync(id);
+        if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            return Unauthorized();
+
+        var book = await _context.Books
+            .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
         if (book == null)
             return NotFound();
 

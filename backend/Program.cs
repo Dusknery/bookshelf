@@ -5,20 +5,32 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//JWT config
+var jwtkey = builder.Configuration["Jwt:Key"]
+    ?? throw new Exception("Jwt:Key is missing in appsettings.json.");
+
+    var keyBytes = Encoding.UTF8.GetBytes(jwtkey);
+
+var issuer = builder.Configuration["Jwt:Issuer"]
+    ?? throw new Exception("Jwt:Issuer is missing in appsettings.json.");
+var audience = builder.Configuration["Jwt:Audience"]
+    ?? throw new Exception("Jwt:Audience is missing in appsettings.json.");
+
 //services
-
-builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
 builder.Services.AddControllers();
-
-var key = "THIS_IS_MY_SUPER_SECRET_KEY_12345"; // temp
+builder.Services.AddScoped<JwtToken>();
 
 //Cors
-builder.Services.AddCors(Options =>
+builder.Services.AddCors(options =>
 {
-    Options.AddPolicy("AllowAngular", policy =>
+    options.AddPolicy("AllowAngular", policy =>
     {
         policy
             .WithOrigins("http://localhost:4200")
@@ -37,14 +49,19 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
 
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
     };
 });
+
+builder.Services.AddAuthorization();
 
 //app build
 var app = builder.Build();

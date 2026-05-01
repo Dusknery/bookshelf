@@ -1,9 +1,11 @@
 <header>
   <nav>
- <span routerLink="/">Bookshelf</span>
+<div *ngIf="auth.getToken()">
+<button (click)="logout()">Logout</button>
 <ul>
   <li routerLink="/booklist">Booklist</li>
   <li routerLink="/citation">Citations</li>
 </ul>
+    </div>
   </nav>
 </header>

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';
 import type { Book } from '../../services/book';
 
+
 @Component({
   selector: 'app-booklist',
   standalone: true, // not a ngModule component, own its own dependencies, can be imported directly in routes (note to self)
