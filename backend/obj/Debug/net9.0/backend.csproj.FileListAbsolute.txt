@@ -134,3 +134,4 @@ C:\Users\linne\Documents\GitHub\bookshelf\backend\obj\Debug\net9.0\backend.pdb
 C:\Users\linne\Documents\GitHub\bookshelf\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 C:\Users\linne\Documents\GitHub\bookshelf\backend\obj\Debug\net9.0\ref\backend.dll
 C:\Users\linne\Documents\GitHub\bookshelf\backend\bin\Debug\net9.0\runtimes\browser-wasm\nativeassets\net8.0\e_sqlite3.a
+C:\Users\linne\Documents\GitHub\bookshelf\backend\obj\Debug\net9.0\backend.sourcelink.json

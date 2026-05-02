@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +8,9 @@ import { HttpClient } from '@angular/common/http';
 export class Auth {
 
   private baseUrl = 'http://localhost:5070/api/auth';
+
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
+  isLoggedIn$ = this.loggedIn.asObservable();
 
   constructor(private http: HttpClient) {}
 

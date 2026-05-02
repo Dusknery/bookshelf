@@ -1,11 +1,24 @@
 <header>
-  <nav>
-<div *ngIf="auth.getToken()">
-<button (click)="logout()">Logout</button>
-<ul>
-  <li routerLink="/booklist">Booklist</li>
-  <li routerLink="/citation">Citations</li>
-</ul>
+  <nav class="navbar">
+
+    <div class="nav-left">
+      <div class="theme-switch" (click)="toggleTheme()">
+        <div class="switch-track" [class.dark]="isDark">
+          <div class="switch-thumb">
+            <i class="fa-solid" [class.fa-sun]="!isDark" [class.fa-moon]="isDark"></i>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <ul class="nav-center" *ngIf="auth.getToken()">
+      <li routerLink="/booklist">Booklist</li>
+      <li routerLink="/citation">Citations</li>
+    </ul>
+
+    <div class="nav-right" *ngIf="auth.getToken()">
+      <button (click)="logout()">Logout</button>
+    </div>
+
   </nav>
 </header>

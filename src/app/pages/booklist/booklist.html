@@ -6,9 +6,14 @@
     <!-- Loop (@ for) through the list of books and display them with edit/delete options (note to self) -->
     @for (book of books; track $index; let i = $index) {
     <li>
-        <strong>{{ book.title }}</strong> - {{ book.author }} - {{ book.publicationDate }}
+        <div class="book-info">
+            <strong>{{ book.title }}</strong>
+            <span>{{ book.author }} {{ book.publicationDate }}</span>
+        </div>
+         <div class="actions">
         <button (click)="openEditForm(i)">Edit</button>
         <button (click)="removeBook(book)">Delete</button>
+        </div>
     </li>
     }
 
