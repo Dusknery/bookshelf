@@ -1,6 +1,6 @@
 # Fullstack Auth + Book App
 
-A fullstack web application built with **Angular 20** and ** C# .NET 9 Web API**. It includes user authentication using **JWT** and a simple book management system.
+A fullstack web application built with **Angular 20** and **C# .NET 9 Web API**. It includes user authentication using **JWT** and a simple book management system.
 
 ---
 
