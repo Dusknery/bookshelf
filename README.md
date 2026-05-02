@@ -9,14 +9,14 @@ A fullstack web application built with **Angular 20** and **C# .NET 9 Web API**.
 - User registration and login
 - JWT authentication
 - Protected routes
-- Add and view books
+- Add and view books and citations
 - SQLite database
 
 ---
 
 ## Tech Stack
 
-- Angular
+- Angular 20
 - .NET 9 Web API
 - SQLite
 - JWT Authentication
