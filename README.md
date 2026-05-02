@@ -36,7 +36,7 @@ Make sure you have installed:
 ---
 
 ## How to Run the Project
+!will start backend and frontend simultaneously!
 ```bash
 npm start
 
-!will start backend and frontend simultaneously!
