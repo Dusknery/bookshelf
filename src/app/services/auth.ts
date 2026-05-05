@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class Auth {
 
-  private baseUrl = 'http://localhost:5070/api/auth';
+  private baseUrl = 'https://bookshelf-api-production-03f6.up.railway.app/api/auth';
 
   private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   isLoggedIn$ = this.loggedIn.asObservable();

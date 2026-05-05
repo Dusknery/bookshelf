@@ -18,7 +18,7 @@ export interface CreateCitation {
   providedIn: 'root',
 })
 export class CitationService {
-  private apiUrl = 'http://localhost:5070/api/citations';
+  private apiUrl = 'https://bookshelf-api-production-03f6.up.railway.app/api/citations';
 
   constructor(private http: HttpClient) { }
 
